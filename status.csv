@@ -23,5 +23,5 @@ vFLyHUSf.xml,9714381576908752953,serialNumber=75f2bfacd5d24ade,✅,✅,✅ Googl
 vR7kjdRn.xml,6843403734403185074,serialNumber=a1cdc6b69229c69f,✅,✅,✅ Google hardware attestation root certificate,✅
 vVc41BKd.xml,3644717209372610241,serialNumber=38f26f1125a20e5b,✅,✅,✅ Google hardware attestation root certificate,✅
 yId912ap.xml,13063048137843225758,serialNumber=d0d0c8d8f4a0f97d | title=TEE,✅,✅,✅ Google hardware attestation root certificate,✅
-z9H65wAq.xml,6933392829777369721,serialNumber=2cb3e9572d82a93b,✅,✅,✅ Google hardware attestation root certificate,✅
+z9H65wAq.xml,6933392829777369721,serialNumber=2cb3e9572d82a93b,✅,✅,✅ Google hardware attestation root certificate,❌ KEY_COMPROMISE
 zj9DixHk.xml,263c56c9661db1056077c41533e9273a,title=TEE | serialNumber=4464fc9748f7fa6f1ca1b244ffe8531c,✅,✅,✅ Google hardware attestation root certificate,✅
