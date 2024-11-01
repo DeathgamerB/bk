@@ -49,7 +49,7 @@ def main():
 
                 # 检查吊销状态
                 if serial_number not in revoked_keybox_list:
-                    values["Not found in Google's revoked keybox list"] = "✅"
+                    values["Status"] = "✅"
                     output.append(values)  # 只添加未吊销的条目
                 else:
                     logging.info(f"{values['File']} is revoked.")
