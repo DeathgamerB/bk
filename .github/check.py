@@ -4,7 +4,6 @@ from pathlib import Path
 from requests import get, RequestException
 from defusedxml.ElementTree import parse
 from cryptography import x509
-from cryptography.hazmat.primitives.serialization import load_pem_public_key
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -29,10 +28,7 @@ def main():
     revoked_keybox_list = fetch_revoked_keybox_list()
 
     with open("status.csv", "w", newline='') as csvfile:
-        fieldnames = [
-            "File",
-            "Not found in Google's revoked keybox list",
-        ]
+        fieldnames = ["File", "Not found in Google's revoked keybox list"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         output = []
@@ -52,10 +48,12 @@ def main():
                 serial_number = hex(certificate.serial_number)[2:]
 
                 # 检查吊销状态
-                status = revoked_keybox_list.get(serial_number)
-                values["Not found in Google's revoked keybox list"] = "✅" if not status else f"❌ {status['reason']}"
+                if serial_number not in revoked_keybox_list:
+                    values["Not found in Google's revoked keybox list"] = "✅"
+                    output.append(values)  # 只添加未吊销的条目
+                else:
+                    logging.info(f"{values['File']} is revoked.")
 
-                output.append(values)
             except Exception as e:
                 logging.error(f"Error processing {kb.name}: {e}")
 
