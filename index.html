@@ -62,9 +62,9 @@
                 rows.forEach((row, index) => {
                     html += '<tr>';
                     row.forEach((cell, cellIndex) => {
-                        // 如果是第一列且非标题行，添加点击事件
+                        // 如果是第一列且非标题行，添加下载链接
                         if (cellIndex === 0 && index !== 0) {
-                            html += `<td class="file-name" onclick="downloadFile('${cell}')">${cell}</td>`;
+                            html += `<td class="file-name"><a href="https://raw.githubusercontent.com/SSM-FX/bk/main/${cell}" download="${cell}">${cell}</a></td>`;
                         } else {
                             html += index === 0 ? `<th>${cell}</th>` : `<td>${cell}</td>`;
                         }
@@ -77,12 +77,6 @@
             } catch (error) {
                 document.getElementById('csv-data').innerText = '无法加载 CSV 文件。';
             }
-        }
-
-        // 下载文件函数
-        function downloadFile(fileName) {
-            const downloadUrl = `https://raw.githubusercontent.com/SSM-FX/bk/main/${fileName}`;
-            window.open(downloadUrl, '_blank');
         }
 
         loadCSV();
