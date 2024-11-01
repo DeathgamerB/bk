@@ -28,7 +28,7 @@ def main():
     revoked_keybox_list = fetch_revoked_keybox_list()
 
     with open("status.csv", "w", newline='') as csvfile:
-        fieldnames = ["File", "Not found in Google's revoked keybox list"]
+        fieldnames = ["File", "Status"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         output = []
