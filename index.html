@@ -62,7 +62,7 @@
                 rows.forEach((row, index) => {
                     html += '<tr>';
                     row.forEach((cell, cellIndex) => {
-                        // 如果是第一列且非标题行，添加下载功能
+                        // 如果是第一列且非标题行，添加点击事件
                         if (cellIndex === 0 && index !== 0) {
                             html += `<td class="file-name" onclick="downloadFile('${cell}')">${cell}</td>`;
                         } else {
@@ -80,26 +80,9 @@
         }
 
         // 下载文件函数
-        async function downloadFile(fileName) {
+        function downloadFile(fileName) {
             const downloadUrl = `https://raw.githubusercontent.com/SSM-FX/bk/main/${fileName}`;
-            try {
-                const response = await fetch(downloadUrl);
-                const blob = await response.blob();
-                const blobUrl = URL.createObjectURL(blob);
-
-                // 创建隐藏的下载链接并点击
-                const link = document.createElement('a');
-                link.href = blobUrl;
-                link.download = fileName;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-
-                // 释放 URL
-                URL.revokeObjectURL(blobUrl);
-            } catch (error) {
-                alert('下载失败');
-            }
+            window.open(downloadUrl, '_blank');
         }
 
         loadCSV();
