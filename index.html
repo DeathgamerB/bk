@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Page</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Status Report</h1>
+    <table id="csvTable"></table>
+
+    <script>
+        // 加载并解析CSV文件
+        fetch('status.csv')
+            。then(response => response.text())
+            。then(data => {
+                const rows = data.split('\n');
+                const table = document.getElementById('csvTable');
+
+                rows.forEach((row, index) => {
+                    const tr = document.createElement('tr');
+                    row.split(',').forEach(cell => {
+                        const cellElement = document.createElement(index === 0 ? 'th' : 'td');
+                        cellElement.textContent = cell.trim();
+                        tr.appendChild(cellElement);
+                    });
+                    table.appendChild(tr);
+                });
+            });
+    </script>
+</body>
+</html>
