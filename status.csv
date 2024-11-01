@@ -15,7 +15,7 @@ ewxySgBV.xml,b46f082b679a78cd1ddb33727d62fb22,title=TEE | serialNumber=446093695
 hbzFmkYe.xml,cf408d495722b0ac413071aff33e5827,title=TEE | serialNumber=9ccc7cb13f0bddc940736bcda24698c6,✅,✅,✅ Google hardware attestation root certificate,✅
 k1Hf0ySh.xml,11004354893796124535,serialNumber=49ed31cf1d5b73fa | title=TEE,✅,✅,✅ Google hardware attestation root certificate,❌ KEY_COMPROMISE
 kre13p41l.xml,fc609574570c3e0a1d347e02a2ad6d4d,title=TEE | serialNumber=3b6c77873cdf80616fc7a86bb4c2944f,✅,✅,✅ Google hardware attestation root certificate,❌ SOFTWARE_FLAW
-mXZE5tB8.xml,9703144777339823906,serialNumber=b410301e51e47cfb,✅,✅,✅ Google hardware attestation root certificate,✅
+mXZE5tB8.xml,9703144777339823906,serialNumber=b410301e51e47cfb,✅,✅,✅ Google hardware attestation root certificate,❌ KEY_COMPROMISE
 n7zXDUuf.xml,17342033108574180851,serialNumber=0bb56886b018b336,✅,✅,✅ Google hardware attestation root certificate,❌ KEY_COMPROMISE
 q0f4iYhS.xml,4648453603379027456,serialNumber=18d9fa8a1e02a531,✅,✅,✅ Google hardware attestation root certificate,❌ KEY_COMPROMISE
 rQJrW8Su.xml,6843403734403185074,serialNumber=a1cdc6b69229c69f,✅,✅,✅ Google hardware attestation root certificate,❌ KEY_COMPROMISE
