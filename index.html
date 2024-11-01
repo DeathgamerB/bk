@@ -2,45 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Status Page</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+    <title>Status Table</title>
 </head>
 <body>
-    <h1>Status Report</h1>
-    <table id="csvTable"></table>
+    <h1>Status CSV Data</h1>
+    <table id="statusTable" border="1">
+        <thead></thead>
+        <tbody></tbody>
+    </table>
 
     <script>
-        // 加载并解析CSV文件
-        fetch('status.csv')
-            。then(response => response.text())
-            。then(data => {
-                const rows = data.split('\n');
-                const table = document.getElementById('csvTable');
+        async function fetchCSV() {
+            const response = await fetch('https://raw.githubusercontent.com/SSM-FX/bk/main/status.csv');
+            const data = await response.text();
+            displayCSV(data);
+        }
 
-                rows.forEach((row, index) => {
-                    const tr = document.createElement('tr');
-                    row.split(',').forEach(cell => {
-                        const cellElement = document.createElement(index === 0 ? 'th' : 'td');
-                        cellElement.textContent = cell.trim();
-                        tr.appendChild(cellElement);
-                    });
-                    table.appendChild(tr);
-                });
+        function displayCSV(data) {
+            const rows = data.split('\n');
+            const table = document.getElementById('statusTable');
+            const thead = table.querySelector('thead');
+            const tbody = table.querySelector('tbody');
+
+            // 填充表头
+            const headers = rows[0].split(',');
+            let headerRow = '<tr>';
+            headers.forEach(header => {
+                headerRow += `<th>${header.trim()}</th>`;
             });
+            headerRow += '</tr>';
+            thead.innerHTML = headerRow;
+
+            // 填充表格内容
+            for (let i = 1; i < rows.length; i++) {
+                const cols = rows[i].split(',');
+                let row = '<tr>';
+                cols.forEach(col => {
+                    row += `<td>${col.trim()}</td>`;
+                });
+                row += '</tr>';
+                tbody.innerHTML += row;
+            }
+        }
+
+        fetchCSV();
     </script>
 </body>
 </html>
