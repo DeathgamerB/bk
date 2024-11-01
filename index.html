@@ -13,7 +13,7 @@
         async function loadCSV() {
             try {
                 // 请求获取 status.csv 文件内容
-                const response = await fetch('status.csv');
+                const response = await fetch('bk/status.csv');
                 const csvData = await response.text();
 
                 // 将 CSV 数据按行分割并解析
