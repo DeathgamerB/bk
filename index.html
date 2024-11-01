@@ -1,44 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Status Report</title>
-</head>
-<body>
-    <h1>Status Report</h1>
-    <div id="csv-data">加载中...</div>
+import csv
+import logging
+from pathlib import Path
+from requests import get, RequestException
+from defusedxml.ElementTree import parse
+from cryptography import x509
 
-    <script>
-        async function loadCSV() {
-            try {
-                // 请求 GitHub 上的原始 CSV 文件
-                const response = await fetch('https://raw.githubusercontent.com/SSM-FX/bk/main/status.csv');
-                const csvText = await response.text();
+# 配置日志
+logging.basicConfig(level=logging.INFO)
 
-                // 解析 CSV 内容
-                const rows = csvText.split('\n').map(row => row.split(','));
+def fetch_revoked_keybox_list():
+    try:
+        response = get(
+            "https://android.googleapis.com/attestation/status",
+            headers={
+                "Cache-Control": "max-age=0, no-cache, no-store, must-revalidate",
+                "Pragma": "no-cache",
+                "Expires": "0",
+            },
+        )
+        response.raise_for_status()  # Raise an error for bad responses
+        return response.json()["entries"]
+    except RequestException as e:
+        logging.error(f"Failed to fetch revoked keybox list: {e}")
+        raise
 
-                // 创建表格
-                let html = '<table border="1">';
-                rows.forEach((row, index) => {
-                    html += '<tr>';
-                    row.forEach(cell => {
-                        html += index === 0 ? `<th>${cell}</th>` : `<td>${cell}</td>`;
-                    });
-                    html += '</tr>';
-                });
-                html += '</table>';
+def main():
+    revoked_keybox_list = fetch_revoked_keybox_list()
 
-                // 插入表格到页面
-                document.getElementById('csv-data').innerHTML = html;
-            } catch (error) {
-                document.getElementById('csv-data').innerText = '无法加载 CSV 文件。';
-            }
-        }
+    with open("status.csv", "w", newline='') as csvfile:
+        fieldnames = ["File", "Not found in Google's revoked keybox list"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        output = []
 
-        // 加载 CSV 文件
-        loadCSV();
-    </script>
-</body>
-</html>
+        for kb in Path(".").glob("*.xml"):
+            try:
+                values = {}
+                values["File"] = kb.name
+
+                root = parse(kb).getroot()
+                pem_number = int(root.find(".//NumberOfCertificates").text.strip())
+                pem_certificates = [
+                    cert.text.strip()
+                    for cert in root.findall('.//Certificate[@format="pem"]')[:pem_number]
+                ]
+                certificate = x509.load_pem_x509_certificate(pem_certificates[0].encode())
+                serial_number = hex(certificate.serial_number)[2:]
+
+                # 检查吊销状态
+                if serial_number not in revoked_keybox_list:
+                    values["Not found in Google's revoked keybox list"] = "✅"
+                    output.append(values)  # 只添加未吊销的条目
+                else:
+                    logging.info(f"{values['File']} is revoked.")
+
+            except Exception as e:
+                logging.error(f"Error processing {kb.name}: {e}")
+
+        writer.writerows(output)
+
+if __name__ == "__main__":
+    main()
