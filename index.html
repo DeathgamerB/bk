@@ -40,6 +40,11 @@
         tr:hover {
             background-color: #f1f1f1;
         }
+        td.file-name {
+            color: #007BFF;
+            cursor: pointer;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -56,8 +61,13 @@
                 let html = '<table>';
                 rows.forEach((row, index) => {
                     html += '<tr>';
-                    row.forEach(cell => {
-                        html += index === 0 ? `<th>${cell}</th>` : `<td>${cell}</td>`;
+                    row.forEach((cell, cellIndex) => {
+                        // 如果是第一列且非标题行，添加点击事件
+                        if (cellIndex === 0 && index !== 0) {
+                            html += `<td class="file-name" onclick="downloadFile('${cell}')">${cell}</td>`;
+                        } else {
+                            html += index === 0 ? `<th>${cell}</th>` : `<td>${cell}</td>`;
+                        }
                     });
                     html += '</tr>';
                 });
@@ -67,6 +77,12 @@
             } catch (error) {
                 document.getElementById('csv-data').innerText = '无法加载 CSV 文件。';
             }
+        }
+
+        // 下载文件函数
+        function downloadFile(fileName) {
+            const downloadUrl = `https://raw.githubusercontent.com/SSM-FX/bk/main/${fileName}`;
+            window.open(downloadUrl, '_blank');
         }
 
         loadCSV();
